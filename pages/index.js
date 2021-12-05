@@ -20,6 +20,7 @@ import {
   DialogActions,
   Button,
   DialogContentText,
+  Skeleton,
 } from "@mui/material"
 
 import withAuthentication from "../components/withAuthentication"
@@ -33,13 +34,23 @@ const Home = (props) => {
   const [tweet, setTweet] = useState("")
   const [openAddTweetModal, setOpenAddTweetModal] = useState(false)
 
+  const [account, setAccount] = useState({})
+  const [isAccountSet, setIsAccountSet] = useState(false)
+
   useEffect(() => {
-    // console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", props)
     if (props && props.account && Object.keys(props.account).length) {
-      // console.log(props.account)
+      setAccount(props.account)
       refreshTweets()
     }
   }, [props])
+
+  useEffect(() => {
+    if (Object.keys(account).length) {
+      setIsAccountSet(true)
+    } else {
+      setIsAccountSet(false)
+    }
+  }, [account])
 
   const refreshTweets = () => {
     authFetch(baseUrl + "tweets", {
@@ -79,19 +90,29 @@ const Home = (props) => {
       )
   }
 
-  return props && props.account && Object.keys(props.account).length ? (
+  return (
     <Box height="100%">
-      {tweets.map((tweet, index) => (
-        <Box key={index} sx={{ p: 1 }}>
-          <TweetCard
-            text={tweet.text}
-            tweet_id={tweet.id}
-            username={props.account.username}
-            date={tweet.create_date}
-            refreshTweets={refreshTweets}
-          />
-        </Box>
-      ))}
+      {Boolean(tweets.length) &&
+        tweets.map((tweet, index) => (
+          <Box key={index} sx={{ p: 1 }}>
+            {isAccountSet ? (
+              <TweetCard
+                text={tweet.text}
+                tweet_id={tweet.id}
+                username={props.account.username}
+                date={tweet.create_date}
+                refreshTweets={refreshTweets}
+              />
+            ) : (
+              <Skeleton variant="rectangular" width="100%" height={200} />
+            )}
+          </Box>
+        ))}
+      {tweets.length === 0 && (
+        <Typography variant="h3" color="GrayText" sx={{ textAlign: "center" }}>
+          {"No tweets yet"}
+        </Typography>
+      )}
       <Fab
         color="primary"
         aria-label="add-tweet"
@@ -122,8 +143,6 @@ const Home = (props) => {
         </DialogActions>
       </Dialog>
     </Box>
-  ) : (
-    <h1></h1>
   )
 }
 

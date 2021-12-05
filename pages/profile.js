@@ -19,6 +19,7 @@ import {
   TextField,
   DialogActions,
   Alert,
+  Skeleton,
 } from "@mui/material"
 
 import withAuthentication from "../components/withAuthentication"
@@ -29,6 +30,7 @@ import theme from "../styles/theme"
 
 const Profile = (props) => {
   const [account, setAccount] = useState({})
+  const [isAccountSet, setIsAccountSet] = useState(false)
   const [rows, setRows] = useState([])
   const [openChangePasswordModal, setOpenChangePasswordModal] = useState(false)
 
@@ -49,7 +51,15 @@ const Profile = (props) => {
         ["Join date", getDateTime(props.account.create_date)],
       ])
     }
-  }, [props, props.account, account])
+  }, [props])
+
+  useEffect(() => {
+    if (Object.keys(account).length) {
+      setIsAccountSet(true)
+    } else {
+      setIsAccountSet(false)
+    }
+  }, [account])
 
   useEffect(() => {
     if (password && passwordRepeat && password == passwordRepeat) {
@@ -90,17 +100,17 @@ const Profile = (props) => {
   }
 
   return (
-    Object.keys(account).length && (
-      <>
-        <Container sx={{ mt: 6 }}>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+    <>
+      <Container sx={{ mt: 6 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {isAccountSet ? (
             <Avatar
               sx={{
                 background: theme.palette.primary.dark,
@@ -112,84 +122,94 @@ const Profile = (props) => {
                 {stringToAvatar(account.username)}
               </Typography>
             </Avatar>
+          ) : (
+            <Skeleton variant="circular" width={100} height={100} />
+          )}
 
-            {alert.message && (
-              <Box width="100%" sx={{ margin: 2 }}>
-                <Alert severity={alert.severity} variant="outlined">
-                  {alert.message}
-                </Alert>
-              </Box>
-            )}
+          {alert.message && (
+            <Box width="100%" sx={{ margin: 2 }}>
+              <Alert severity={alert.severity} variant="outlined">
+                {alert.message}
+              </Alert>
+            </Box>
+          )}
 
-            <TableContainer component={Paper} sx={{ my: 3 }}>
-              <Table sx={{ minWidth: 700 }}>
-                <TableBody>
-                  {rows.map((row, index) => (
-                    <StyledTableRow key={index}>
-                      <TableCell align="right">
+          <TableContainer component={Paper} sx={{ my: 3 }}>
+            <Table sx={{ minWidth: 700 }}>
+              <TableBody>
+                {rows.map((row, index) => (
+                  <StyledTableRow key={index}>
+                    <TableCell align="right">
+                      {isAccountSet ? (
                         <Typography variant="h6" sx={{ fontWeight: 400 }}>
                           {row[0]}
                         </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="h6" sx={{ fontWeight: 500 }}>
+                      ) : (
+                        <Skeleton variant="text" />
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isAccountSet ? (
+                        <Typography variant="h6" sx={{ fontWeight: 400 }}>
                           {row[1]}
                         </Typography>
-                      </TableCell>
-                    </StyledTableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                      ) : (
+                        <Skeleton variant="text" />
+                      )}
+                    </TableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
 
-            <Button
-              variant="contained"
-              onClick={() => setOpenChangePasswordModal(true)}
-            >
-              Change password
-            </Button>
-          </Box>
-        </Container>
-        <Dialog
-          open={openChangePasswordModal}
-          onClose={handleCloseChangePasswordModal}
-        >
-          <DialogTitle>Change password</DialogTitle>
-          <DialogContent>
-            <TextField
-              margin="normal"
-              id="password"
-              name="password"
-              variant="outlined"
-              label="New password"
-              type="password"
-              autoComplete="current-password"
-              fullWidth
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <TextField
-              margin="normal"
-              id="password-repeat"
-              name="password-repeat"
-              variant="outlined"
-              label="Repeat password"
-              type="password"
-              autoComplete="current-password"
-              fullWidth
-              value={passwordRepeat}
-              onChange={(e) => setPasswordRepeat(e.target.value)}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseChangePasswordModal}>Cancel</Button>
-            <Button disabled={!isFormValid} onClick={handleChangePassword}>
-              Update
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </>
-    )
+          <Button
+            variant="contained"
+            onClick={() => setOpenChangePasswordModal(true)}
+          >
+            Change password
+          </Button>
+        </Box>
+      </Container>
+      <Dialog
+        open={openChangePasswordModal}
+        onClose={handleCloseChangePasswordModal}
+      >
+        <DialogTitle>Change password</DialogTitle>
+        <DialogContent>
+          <TextField
+            margin="normal"
+            id="password"
+            name="password"
+            variant="outlined"
+            label="New password"
+            type="password"
+            autoComplete="current-password"
+            fullWidth
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <TextField
+            margin="normal"
+            id="password-repeat"
+            name="password-repeat"
+            variant="outlined"
+            label="Repeat password"
+            type="password"
+            autoComplete="current-password"
+            fullWidth
+            value={passwordRepeat}
+            onChange={(e) => setPasswordRepeat(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseChangePasswordModal}>Cancel</Button>
+          <Button disabled={!isFormValid} onClick={handleChangePassword}>
+            Update
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   )
 }
 
