@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 
 import "../styles/globals.css"
 import { CacheProvider } from "@emotion/react"
@@ -17,6 +17,10 @@ const clientSideEmotionCache = createEmotionCache()
 export default function MyApp(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
   const [isLoggedIn] = useAuth()
+
+  useEffect(() => {
+    console.log("isLoggedIn", isLoggedIn)
+  }, [isLoggedIn])
 
   return (
     <CacheProvider value={emotionCache}>

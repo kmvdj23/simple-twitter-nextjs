@@ -13,6 +13,8 @@ import {
 } from "@mui/material"
 import { Box } from "@mui/system"
 
+import anonymousRoute from "../components/anonymousRoute"
+
 const Signup = () => {
   return (
     <Container component="main" maxWidth="sm">
@@ -88,4 +90,4 @@ const Copyright = (props) => {
   )
 }
 
-export default Signup
+export default anonymousRoute(Signup)

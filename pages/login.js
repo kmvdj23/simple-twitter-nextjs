@@ -15,6 +15,7 @@ import {
 import { Box } from "@mui/system"
 import { useRouter } from "next/router"
 
+import anonymousRoute from "../components/anonymousRoute"
 import { login } from "../config/auth"
 import { loginEndpoint } from "../config/endpoints"
 
@@ -33,11 +34,15 @@ const Login = () => {
       username,
       password,
     }
-    console.log(data)
     loginEndpoint(username, password)
       .then((response) => {
         login(response.access_token)
-        router.push("/placeholder")
+        console.log("AAAAAAAAAAAA", router.query, router.asPath)
+        if (Object.keys(router.query).length && router.query.next) {
+          router.push(router.query.next)
+        } else {
+          router.push("/")
+        }
       })
       .catch((error) => {
         if (error && error.response) {
@@ -132,4 +137,4 @@ const Copyright = (props) => {
   )
 }
 
-export default Login
+export default anonymousRoute(Login)
