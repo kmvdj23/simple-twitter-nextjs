@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useState } from "react"
 
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
 import {
@@ -12,10 +12,38 @@ import {
   Link,
 } from "@mui/material"
 import { Box } from "@mui/system"
+import { useRouter } from "next/router"
 
 import anonymousRoute from "../components/anonymousRoute"
+import { login } from "../config/auth"
+import { signupEndpoint } from "../config/endpoints"
 
 const Signup = () => {
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const router = useRouter()
+
+  const handleSignup = (e) => {
+    e.preventDefault()
+    let data = {
+      username,
+      password,
+      email,
+    }
+    signupEndpoint(data)
+      .then((response) => {
+        login(response.access_token)
+        router.push("/")
+      })
+      .catch((error) => {
+        console.error(
+          "[SIGNUP ERROR]",
+          error && error.response ? error.response.data : error
+        )
+      })
+  }
+
   return (
     <Container component="main" maxWidth="sm">
       <CssBaseline />
@@ -43,6 +71,8 @@ const Signup = () => {
             name="username"
             autoComplete="username"
             autoFocus
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
           <TextField
             margin="normal"
@@ -52,6 +82,8 @@ const Signup = () => {
             label="Email address"
             name="email"
             autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
             margin="normal"
@@ -62,8 +94,16 @@ const Signup = () => {
             type="password"
             id="password"
             autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            onClick={handleSignup}
+          >
             Submit
           </Button>
           <Grid container justifyContent="flex-end">
