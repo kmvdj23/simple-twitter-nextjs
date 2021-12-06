@@ -7,7 +7,6 @@ import {
   Container,
   Avatar,
   Typography,
-  Link,
   Divider,
   TableContainer,
   Table,
@@ -20,7 +19,6 @@ import {
 import { baseUrl } from "../config/baseUrl"
 import { getUsers} from "../config/endpoints"
 import { authFetch } from "../config/auth"
-import customStorage from "../config/customStorage"
 import withAuthentication from "../components/withAuthentication"
 import { Profile } from './profile'
 import theme from "../styles/theme"
