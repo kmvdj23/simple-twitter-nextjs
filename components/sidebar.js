@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
-import PeopleIcon from '@mui/icons-material/People'
 import FeedIcon from "@mui/icons-material/Feed"
 import LogoutIcon from "@mui/icons-material/Logout"
+import PeopleIcon from "@mui/icons-material/People"
 import {
   Avatar,
   Box,

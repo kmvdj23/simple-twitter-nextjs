@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+
 import {
   Box,
   Card,
@@ -8,12 +9,13 @@ import {
   Typography,
   Link
 } from "@mui/material"
+
 import withAuthentication from "../components/withAuthentication"
 import { authFetch } from "../config/auth"
 import { baseUrl } from "../config/baseUrl"
 import { stringToAvatar } from "../config/utils"
 import theme from "../styles/theme"
-import { getUsers } from "../config/endpoints"
+
 
 const UserCard = (props) => {
   return (
@@ -39,7 +41,7 @@ const UserCard = (props) => {
 }
 
 
-const Users = (props) => {
+const Users = () => {
   const [users, setUsers ] = useState([])
 
   useEffect(() => {

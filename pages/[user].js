@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+
 import {
   Box,
   Card,
@@ -16,13 +17,14 @@ import {
   TableRow,
   TableCell
 } from "@mui/material"
-import { baseUrl } from "../config/baseUrl"
-import { getUsers} from "../config/endpoints"
-import { authFetch } from "../config/auth"
+
 import withAuthentication from "../components/withAuthentication"
-import { Profile } from './profile'
-import theme from "../styles/theme"
+import { authFetch } from "../config/auth"
+import { baseUrl } from "../config/baseUrl"
+import { getUsers } from "../config/endpoints"
 import { getDateTime, stringToAvatar } from "../config/utils"
+import theme from "../styles/theme"
+
 
 const TweetCard = (props) => {
   return (
@@ -58,7 +60,7 @@ const User = ({data}) => {
   const [tweets, setTweets] = useState([])
   const [rows, setRows] = useState([])
 
-  useEffect(() => {
+  useEffect((data) => {
     authFetch(baseUrl + "account/" + data.username, {
       method: "get",
     })
@@ -186,7 +188,7 @@ export async function getStaticProps({ params }) {
 
   return {
     props: {
-      data: { 'username' : user.username},
+      data: { "username" : user.username},
     },
   }
 }
