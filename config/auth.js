@@ -1,5 +1,4 @@
 import { createAuthProvider } from "react-token-auth"
-
 import customStorage from "./customStorage"
 import { refreshToken } from "./endpoints"
 

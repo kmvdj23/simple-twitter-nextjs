@@ -37,7 +37,6 @@ const Login = () => {
     loginEndpoint(username, password)
       .then((response) => {
         login(response.access_token)
-        console.log("AAAAAAAAAAAA", router.query, router.asPath)
         if (Object.keys(router.query).length && router.query.next) {
           router.push(router.query.next)
         } else {

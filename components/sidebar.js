@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
+import PeopleIcon from '@mui/icons-material/People'
 import FeedIcon from "@mui/icons-material/Feed"
 import LogoutIcon from "@mui/icons-material/Logout"
 import {
@@ -100,17 +101,23 @@ const Sidebar = (props) => {
         />
         <Divider />
         <List>
+          <ListItemButton component={Link} href="/">
+            <ListItemIcon>
+              <FeedIcon />
+            </ListItemIcon>
+            <ListItemText primary="Feed" />
+          </ListItemButton>
           <ListItemButton component={Link} href="/profile">
             <ListItemIcon>
               <AccountCircleIcon />
             </ListItemIcon>
             <ListItemText primary="Account" />
           </ListItemButton>
-          <ListItemButton component={Link} href="/">
+          <ListItemButton component={Link} href="/users">
             <ListItemIcon>
-              <FeedIcon />
+              <PeopleIcon />
             </ListItemIcon>
-            <ListItemText primary="Feed" />
+            <ListItemText primary="Users" />
           </ListItemButton>
           <ListItemButton onClick={() => setOpenLogoutModal(true)}>
             <ListItemIcon>

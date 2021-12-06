@@ -1,13 +1,17 @@
 import axios from "axios"
 
 import { baseUrl } from "./baseUrl"
+import { authFetch } from "./auth"
+
+import customStorage from "./customStorage"
+
 
 const instance = axios.create({
   baseURL: baseUrl,
   timeout: 1200,
 })
 
-const invoke = async (url, method = "get", data = {}, csrf = "") => {
+const invoke = async (url, method = "get", data = {}, csrf = "", auth="") => {
   return instance({
     method: method,
     url: url,
@@ -15,6 +19,7 @@ const invoke = async (url, method = "get", data = {}, csrf = "") => {
     headers: {
       ...instance.defaults.headers,
       "X-CSRFToken": csrf,
+      "Authorization": auth ? "Bearer " + auth : auth
     },
   })
     .then((response) => Promise.resolve(response.data))
@@ -34,4 +39,12 @@ const refreshToken = async (token) => {
   return invoke("refresh", "post", token)
 }
 
-export { instance, invoke, loginEndpoint, refreshToken, signupEndpoint }
+const getUsers = async () => {
+  return fetch(baseUrl + "users", {
+        method: "get",
+      }).then((response) => Promise.resolve(response.json()))
+    .catch((error) => Promise.reject(error))
+  // return invoke("users")
+}
+
+export { instance, invoke, loginEndpoint, refreshToken, signupEndpoint, getUsers }
