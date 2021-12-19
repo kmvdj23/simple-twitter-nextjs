@@ -60,7 +60,7 @@ const User = (props) => {
   const [tweets, setTweets] = useState([])
   const [rows, setRows] = useState([])
 
-  useEffect(() => {
+  useEffect((props) => {
     authFetch(baseUrl + "account/" + props.user.username, {
       method: "get",
     })
@@ -189,7 +189,7 @@ export async function getStaticProps({ params }) {
   if (!user) {
     return {
       redirect: {
-        destination: '/',
+        destination: "/",
         permanent: false,
       },
     }
