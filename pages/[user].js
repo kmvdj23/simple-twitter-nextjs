@@ -54,14 +54,14 @@ const TweetCard = (props) => {
   )
 }
 
-const User = ({data}) => {
+const User = (props) => {
 
   const [user, setUser ] = useState({})
   const [tweets, setTweets] = useState([])
   const [rows, setRows] = useState([])
 
-  useEffect((data) => {
-    authFetch(baseUrl + "account/" + data.username, {
+  useEffect(() => {
+    authFetch(baseUrl + "account/" + props.user.username, {
       method: "get",
     })
       .then((response) => response.json())
@@ -80,7 +80,7 @@ const User = ({data}) => {
             : error
         )
       )
-    authFetch(baseUrl + "account/" + data.username + "/tweets", {
+    authFetch(baseUrl + "account/" + props.user.username + "/tweets", {
       method: "get",
     })
       .then((response) => response.json())
@@ -113,7 +113,7 @@ const User = ({data}) => {
             }}
           >
             <Typography variant="h3">
-              {stringToAvatar(data.username)}
+              {stringToAvatar(props.user.username)}
             </Typography>
           </Avatar>
           <TableContainer component={Paper} sx={{ my: 3 }}>
@@ -187,9 +187,7 @@ export async function getStaticProps({ params }) {
   let user = users.find((user) => user.username === params.user)
 
   return {
-    props: {
-      data: { "username" : user.username},
-    },
+    props: { user }
   }
 }
 
