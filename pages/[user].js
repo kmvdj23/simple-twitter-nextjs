@@ -168,23 +168,29 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }))
 
 
-export async function getStaticPaths() {
-  const users = await getUsers()
-  const paths = users.map(user => ({
-    params: {
-      user: user.username
-    }
-  }))
+// export async function getStaticPaths() {
+//   const users = await getUsers()
+//   const paths = users.map(user => ({
+//     params: {
+//       user: user.username
+//     }
+//   }))
 
-  return {
-    paths,
-    fallback: false,
-  }
-}
+//   return {
+//     paths,
+//     fallback: false,
+//   }
+// }
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
   const users = await getUsers()
   let user = users.find((user) => user.username === params.user)
+
+  if (!user) {
+    return {
+      notFound: true
+    }
+  }
 
   return {
     props: { user }
